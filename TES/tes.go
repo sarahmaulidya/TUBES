@@ -182,7 +182,6 @@ func statistikMoodMingguan() {
 	for i, m := range daftarMood {
 		fmt.Printf("%d. %s | Skor Emosi: %d | ", i+1, m.Tanggal, m.SkorEmosi)
 
-		// Grafik sederhana pakai bintang
 		for j := 0; j < m.SkorEmosi; j++ {
 			fmt.Print("*")
 		}
