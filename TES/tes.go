@@ -168,3 +168,154 @@ func cariPrioritas(target int) {
         fmt.Println("Tugas dengan prioritas tersebut tidak ditemukan.")
     }
 }
+
+func statistikMoodMingguan() {
+	fmt.Println("\n=== STATISTIK TREN MOOD MINGGUAN ===")
+
+	if len(daftarMood) == 0 {
+		fmt.Println("Belum ada data mood.")
+		return
+	}
+
+	total := 0
+
+	for i, m := range daftarMood {
+		fmt.Printf("%d. %s | Skor Emosi: %d | ", i+1, m.Tanggal, m.SkorEmosi)
+
+		// Grafik sederhana pakai bintang
+		for j := 0; j < m.SkorEmosi; j++ {
+			fmt.Print("*")
+		}
+
+		fmt.Println()
+		total += m.SkorEmosi
+	}
+
+	rataRata := float64(total) / float64(len(daftarMood))
+
+	fmt.Printf("\nRata-rata skor emosi minggu ini: %.2f\n", rataRata)
+
+	if rataRata >= 8 {
+		fmt.Println("Kesimpulan: Mood sangat baik.")
+	} else if rataRata >= 6 {
+		fmt.Println("Kesimpulan: Mood cukup baik.")
+	} else if rataRata >= 4 {
+		fmt.Println("Kesimpulan: Mood kurang stabil.")
+	} else {
+		fmt.Println("Kesimpulan: Mood perlu diperhatikan.")
+	}
+}
+
+func statistikPenyelesaianTugas() {
+	fmt.Println("\n=== STATISTIK PENYELESAIAN TUGAS ===")
+
+	if len(daftarTugas) == 0 {
+		fmt.Println("Belum ada data tugas.")
+		return
+	}
+
+	selesai := 0
+	belum := 0
+
+	for _, t := range daftarTugas {
+		if t.Status == "Selesai" {
+			selesai++
+		} else {
+			belum++
+		}
+	}
+
+	total := len(daftarTugas)
+
+	persenSelesai := float64(selesai) / float64(total) * 100
+	persenBelum := float64(belum) / float64(total) * 100
+
+	fmt.Printf("Total tugas           : %d\n", total)
+	fmt.Printf("Tugas selesai         : %d (%.2f%%)\n", selesai, persenSelesai)
+	fmt.Printf("Tugas belum selesai   : %d (%.2f%%)\n", belum, persenBelum)
+
+	fmt.Print("Grafik selesai        : ")
+	for i := 0; i < selesai; i++ {
+		fmt.Print("*")
+	}
+
+	fmt.Print("\nGrafik belum selesai  : ")
+	for i := 0; i < belum; i++ {
+		fmt.Print("*")
+	}
+
+	fmt.Println()
+}
+
+func main() {
+	var pilihan int
+
+	for {
+		fmt.Println("\n===================================")
+		fmt.Println("         APLIKASI MINDFLOW")
+		fmt.Println("===================================")
+		fmt.Println("1. Tambah Mood")
+		fmt.Println("2. Tampilkan Mood")
+		fmt.Println("3. Hapus Mood")
+		fmt.Println("4. Tambah Tugas")
+		fmt.Println("5. Tampilkan Tugas")
+		fmt.Println("6. Ubah Status Tugas")
+		fmt.Println("7. Cari Tugas Berdasarkan Prioritas")
+		fmt.Println("8. Urutkan Tugas Berdasarkan Prioritas")
+		fmt.Println("9. Urutkan Tugas Berdasarkan Durasi")
+		fmt.Println("10. Statistik Mood Mingguan")
+		fmt.Println("11. Statistik Penyelesaian Tugas")
+		fmt.Println("0. Keluar")
+
+		fmt.Print("Pilih menu: ")
+		fmt.Scanln(&pilihan)
+
+		switch pilihan {
+
+		case 1:
+			tambahMood()
+
+		case 2:
+			tampilMood()
+
+		case 3:
+			hapusMood()
+
+		case 4:
+			tambahTugas()
+
+		case 5:
+			tampilTugas()
+
+		case 6:
+			ubahStatusTugas()
+
+		case 7:
+			var target int
+			fmt.Print("Masukkan prioritas yang dicari: ")
+			fmt.Scanln(&target)
+			cariPrioritas(target)
+
+		case 8:
+			urutTugasPrioritas()
+			tampilTugas()
+
+		case 9:
+			urutTugasDurasi()
+			tampilTugas()
+
+		case 10:
+			statistikMoodMingguan()
+
+		case 11:
+			statistikPenyelesaianTugas()
+
+		case 0:
+			fmt.Println("Terima kasih telah menggunakan MindFlow.")
+			return
+
+		default:
+			fmt.Println("Pilihan tidak valid!")
+		}
+	}
+}
